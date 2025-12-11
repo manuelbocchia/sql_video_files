@@ -1,0 +1,42 @@
+¡Hola a todos! Bienvenidos a esta sesión donde desglosaremos un concepto fundamental en el mundo de las bases de datos: la cláusula `FULL JOIN` en SQL. Si alguna vez te has preguntado cómo unir información de diferentes tablas de forma exhaustiva, sin perder ningún dato de ninguna de ellas, estás en el lugar correcto. En nuestro viaje por SQL, aprender a combinar datos es tan crucial como saber crearlos o modificarlos.
+
+Imagina que tienes dos listas importantes, como una lista de todos los estudiantes de una escuela y otra lista de todos los cursos que ofrece. Quieres ver absolutamente toda la información: qué estudiantes están en qué cursos, qué estudiantes aún no se han inscrito en ningún curso, y qué cursos existen pero no tienen estudiantes inscritos. ¿Cómo harías para obtener esa visión completa sin omitir nada? Aquí es donde `FULL JOIN` se convierte en tu mejor aliado. A diferencia de otras uniones que se centran en una tabla más que en otra, `FULL JOIN` es como un director que reúne a todos los participantes de dos obras diferentes, asegurándose de que cada uno esté presente, incluso si no tienen un papel en común. Nos proporciona una perspectiva integral, señalando las conexiones existentes y también los "huecos" donde no hay correspondencia directa, lo que se representa con un valor especial llamado `NULL`. Prepárense para descubrir cómo esta poderosa herramienta nos permite una comprensión total de nuestros datos.
+
+---
+
+### Entendiendo la Cláusula `FULL JOIN`: El Enlace Completo
+
+La cláusula `FULL JOIN`, también conocida como `FULL OUTER JOIN`, es una instrucción en SQL diseñada para combinar filas de dos tablas, asegurándose de que **todos los registros de ambas tablas** sean incluidos en el resultado. Su propósito principal es obtener una vista completa de los datos, tanto los que tienen una coincidencia directa entre las tablas como aquellos que solo existen en una de ellas.
+
+Para entender su poder, es útil compararlo con sus "primos":
+*   **`LEFT JOIN`**: Se enfoca en la tabla de la izquierda. Retorna todos los registros de la tabla izquierda y los registros coincidentes de la tabla derecha. Si no hay coincidencia en la derecha, los campos de la tabla derecha aparecerán como `NULL`. Es como preguntar: "Muéstrame a todos los estudiantes, y si están en un curso, muéstrame el curso."
+*   **`RIGHT JOIN`**: Hace lo contrario. Se enfoca en la tabla de la derecha, retornando todos sus registros y las coincidencias de la tabla izquierda. Si no hay coincidencia en la izquierda, sus campos serán `NULL`. Es decir: "Muéstrame todos los cursos, y si tienen estudiantes, muéstrame a los estudiantes."
+
+En contraste, `FULL JOIN` actúa como el "gran integrador". No favorece a ninguna tabla. Combina los efectos de `LEFT JOIN` y `RIGHT JOIN` en una sola operación. Si un registro de la tabla izquierda no encuentra una coincidencia en la tabla derecha, los campos de la tabla derecha se rellenan con `NULL`. De igual manera, si un registro de la tabla derecha no tiene coincidencia en la tabla izquierda, los campos de la tabla izquierda aparecerán como `NULL`. Este valor `NULL` es crucial; significa que "no hay valor" o "desconocido" en ese contexto específico. Piensen en ello como una hoja de cálculo gigante que tiene columnas para ambas listas, y si un elemento de una lista no tiene su par en la otra, simplemente se deja en blanco (`NULL`) en las columnas correspondientes. Esta capacidad de mostrar todas las posibles conexiones y desconexiones hace que `FULL JOIN` sea indispensable para obtener una visión holística de nuestros datos, identificando tanto las relaciones como las ausencias.
+
+---
+
+### Aplicación Práctica del `FULL JOIN`: Uniendo Inscripciones y Deportes
+
+Para ilustrar el funcionamiento de `FULL JOIN` de manera concreta, consideremos un escenario común en el manejo de bases de datos: la relación entre una tabla de "inscriptos" (estudiantes registrados) y una tabla de "deportes" (actividades deportivas ofrecidas).
+
+Imagina que tenemos dos tablas:
+1.  **`INCRIPTOS`**: Contiene información como el documento del estudiante, su matrícula y el código del deporte en el que está inscrito.
+2.  **`DEPORTES`**: Incluye el código del deporte, su nombre y el profesor que lo imparte.
+
+El vínculo natural entre estas dos tablas es el "código del deporte". Un `FULL JOIN` se utilizaría con la siguiente estructura básica en SQL:
+
+```sql
+SELECT I.documento, I.matricula, D.nombre AS deporte, D.profesor
+FROM inscriptos I
+FULL JOIN deportes D ON I.codigo_deporte = D.codigo;
+```
+
+Aquí, `I` y `D` son alias que usamos para acortar los nombres de las tablas. La cláusula `ON` especifica la condición para el enlace, es decir, qué campos deben coincidir.
+
+El resultado de esta consulta sería una tabla combinada que incluiría:
+*   **Coincidencias Perfectas**: Estudiantes inscritos en un deporte existente. Veríamos su documento, matrícula, el nombre del deporte y el profesor.
+*   **Registros Solo en `DEPORTES`**: Aquellos deportes que no tienen ningún estudiante inscrito. Por ejemplo, si existe el deporte "Tenis" pero nadie se ha matriculado en él, la fila del resultado mostraría "Tenis" y el profesor correspondiente, pero los campos `documento` y `matricula` de la tabla `INCRIPTOS` aparecerían como `NULL`. Esto es útil para saber qué deportes carecen de participantes.
+*   **Registros Solo en `INCRIPTOS`**: Estudiantes que están registrados en la base de datos pero no están inscritos en ningún deporte. Por ejemplo, si tenemos un estudiante con una matrícula pero su campo `codigo_deporte` está vacío o no coincide con ningún deporte existente, su `documento` y `matricula` aparecerán, pero los campos `nombre` (deporte) y `profesor` de la tabla `DEPORTES` se mostrarán como `NULL`. Esto nos indica qué estudiantes no tienen una actividad asignada.
+
+En un contexto real, un director de un centro deportivo podría usar este `FULL JOIN` para obtener un informe completo que le permita visualizar de un vistazo: qué estudiantes están activos, qué deportes son populares, qué deportes necesitan más promoción (porque no tienen inscritos) y qué estudiantes necesitan ser contactados para elegir una actividad. Esta visión global es invaluable para la gestión y la toma de decisiones informadas.

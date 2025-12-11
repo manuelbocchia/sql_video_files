@@ -1,0 +1,68 @@
+¡Hola! Como tu experto en aprendizaje de idiomas y pedagogía, te guiaré a través de los conceptos fundamentales de cómo interactuar y transformar datos en SQL, el lenguaje estándar para bases de datos. Imagina SQL como el idioma que usas para comunicarte con grandes colecciones de información. Aprenderemos a pedirle a la base de datos que realice cálculos por nosotros o que combine textos de forma inteligente, mostrándonos los resultados justo como los necesitamos.
+
+Este módulo se centra en las "columnas calculadas" y la "concatenación", dos herramientas poderosas que te permitirán no solo ver los datos almacenados, sino también generar nueva información o presentarla de maneras más útiles y comprensibles. Verás cómo estas técnicas son esenciales para crear informes dinámicos, realizar análisis rápidos y preparar los datos para diversas aplicaciones. Prepárate para descubrir cómo hacer que tus consultas SQL sean más inteligentes y tus datos más expresivos, transformando la información bruta en conocimientos valiosos, tal como se hace en escenarios reales de análisis de datos y desarrollo de software.
+
+---
+
+### **Dominando las Columnas Calculadas y la Concatenación en SQL: Crea Datos Dinámicos**
+
+En el mundo de la gestión de datos, SQL (Structured Query Language) es la herramienta esencial para interactuar con las bases de datos. Una de sus capacidades más útiles es la de crear "columnas calculadas", que nos permiten generar nueva información a partir de datos ya existentes, sin necesidad de almacenarla previamente. Piensa en ello como tener una calculadora integrada directamente en tus solicitudes de datos.
+
+Este resumen desglosa cómo aplicar esta funcionalidad clave en SQL, abarcando dos técnicas fundamentales: el uso de operadores aritméticos para realizar cálculos numéricos y la concatenación para unir y formatear texto. Veremos cómo estas habilidades no solo mejoran la presentación de tus datos, sino que también son cruciales para el análisis y la toma de decisiones en diversos contextos profesionales. Desde calcular el costo total de un pedido hasta formatear nombres completos, estas herramientas te darán un control sin precedentes sobre la información que extraes y presentas.
+
+---
+
+### **1. Columnas Calculadas con Operadores Aritméticos: Dando Vida a Tus Números**
+
+Las columnas calculadas te permiten realizar operaciones matemáticas directamente en tus consultas SQL, mostrando resultados que no existen explícitamente en la tabla original, sino que se derivan en el momento. Es como pedirle a tu base de datos que sea tu asistente matemático personal. Los operadores aritméticos básicos son tus aliados: suma (`+`), resta (`-`), multiplicación (`*`) y división (`/`).
+
+**¿Cómo funciona?**
+Imagina que tienes una tabla de libros con columnas como `Título`, `Precio` y `Cantidad`. Si quisieras saber el "valor total" de los ejemplares de cada libro en tu inventario, no necesitarías una columna separada para eso. Simplemente le pides a SQL que multiplique `Precio` por `Cantidad` en el momento de la consulta.
+
+**Ejemplo Práctico:**
+Si tienes un libro con `Precio = 15` y `Cantidad = 3`, tu consulta podría ser:
+`SELECT Titulo, Precio, Cantidad, (Precio * Cantidad) AS ValorTotal FROM Libros;`
+El resultado mostrará una nueva columna llamada `ValorTotal` con el valor `45` para ese libro, sin haberlo almacenado en la tabla.
+
+**Escenario de la Vida Real:**
+En un sistema de inventario de una tienda, esto es invaluable. Puedes calcular el valor total de un producto, aplicar descuentos directamente en la consulta, o proyectar ganancias sin alterar los datos originales. Por ejemplo, para calcular un precio con 10% de descuento, usarías:
+`SELECT Titulo, Precio, (Precio - (Precio * 0.1)) AS PrecioConDescuento FROM Libros;`
+Aquí, `(Precio * 0.1)` calcula el monto del descuento, y `Precio - (monto_descuento)` te da el precio final. Esto es como ver el precio en la etiqueta original, pero con un cartel virtual que ya aplica la rebaja. Es útil para generar listados de precios promocionales al instante, sin modificar los precios base de los productos.
+
+---
+
+### **2. Actualizando Datos con Cálculos: Cambiando la Realidad de tu Base de Datos**
+
+Mientras que las columnas calculadas en una instrucción `SELECT` solo *muestran* un resultado temporal, la instrucción `UPDATE` te permite *modificar permanentemente* los datos almacenados en tu tabla utilizando esos mismos cálculos. Es crucial entender la diferencia: `SELECT` es para "ver" la información de una forma nueva, `UPDATE` es para "cambiar" la información de manera definitiva.
+
+**¿Cómo funciona?**
+Cuando usas `UPDATE`, le dices a la base de datos: "en esta tabla, para ciertas filas, quiero que una columna específica tome un nuevo valor que se calculará de esta manera". Es como ir al almacén y cambiar físicamente la etiqueta de precio de un producto por el nuevo precio de descuento.
+
+**Ejemplo Práctico:**
+Si antes solo visualizábamos el precio con descuento, ahora podemos aplicarlo de forma permanente a todos los libros. La instrucción sería:
+`UPDATE Libros SET Precio = (Precio - (Precio * 0.1));`
+Esta consulta toma el `Precio` actual de cada libro, calcula el 10% de descuento y luego actualiza la columna `Precio` con este nuevo valor reducido. Una vez ejecutado, si realizas un `SELECT` simple a la tabla, verás que los precios han sido modificados.
+
+**Escenario de la Vida Real:**
+Imagina que una tienda decide aplicar un descuento del 10% a todos los libros de su catálogo por una promoción especial. Usar un `UPDATE` con un cálculo es la forma más eficiente de aplicar esta modificación masiva. No tendrías que ir libro por libro calculando y cambiando el precio manualmente. Otros ejemplos incluyen ajustar automáticamente los salarios de los empleados en un porcentaje fijo o recalcular inventarios después de una auditoría. Es una herramienta poderosa para mantener los datos precisos y actualizados a gran escala, pero debe usarse con precaución, ya que los cambios son permanentes y pueden requerir copias de seguridad previas.
+
+---
+
+### **3. Concatenación de Datos: Fusionando Textos para una Mejor Presentación**
+
+La concatenación es la acción de unir o "pegar" cadenas de texto (datos alfanuméricos) de diferentes columnas o añadir texto fijo a los datos. Es como si pudieras tomar dos o más etiquetas separadas y unirlas en una sola para crear una descripción más completa o un formato específico. En el contexto de SQL (específicamente en Oracle, como en el ejemplo), se utiliza el operador `||` (doble barra vertical) para lograr esto.
+
+**¿Cómo funciona?**
+Puedes combinar el contenido de varias columnas en una sola salida y también insertar caracteres o palabras fijas entre ellas. Esto es ideal para generar nombres completos a partir de nombre y apellido, direcciones formateadas, o descripciones de productos que combinen varios atributos.
+
+**Ejemplo Práctico:**
+Si queremos ver el `Título` y el `Autor` de cada libro combinados en una sola columna, con un guion como separador, haríamos:
+`SELECT Titulo || ' - ' || Autor AS TituloYAutor FROM Libros;`
+Aquí, `Titulo` (el contenido de la columna Título) se une con la cadena de texto fija `' - '` (un espacio, un guion, otro espacio) y luego con `Autor`. El resultado será una nueva columna llamada `TituloYAutor` que mostrará, por ejemplo, "Cien años de soledad - Gabriel García Márquez".
+
+**Escenario de la Vida Real:**
+Piensa en una plataforma de comercio electrónico. Cuando ves un producto listado, a menudo se muestra una descripción compacta que incluye el nombre del producto, el precio y, a veces, una breve característica. La concatenación es perfecta para esto.
+Otro ejemplo es añadir un símbolo de moneda al precio:
+`SELECT Titulo, '$' || Precio AS PrecioFormateado FROM Libros;`
+Esto mostrará: "Cien años de soledad | $25.00".
+La concatenación es fundamental para generar reportes legibles, personalizar correos electrónicos o mensajes, y para exportar datos en un formato específico requerido por otras aplicaciones. Permite presentar la información de manera más cohesiva y amigable para el usuario, sin tener que modificar el diseño de la base de datos subyacente.

@@ -1,0 +1,76 @@
+¡Hola! Como experto en pedagogía para el aprendizaje de idiomas, te guiaré a través de los conceptos fundamentales para modificar la estructura de tus tablas en SQL. Imagina una base de datos como una biblioteca muy organizada. Cada "tabla" es como un estante específico para un tipo de libro (por ejemplo, "Libros de Ficción", "Revistas Científicas"). Dentro de cada estante, los libros tienen características comunes como "Título", "Autor" o "Año de Publicación", que en el mundo de las bases de datos llamamos "campos" o "columnas".
+
+A veces, después de haber organizado tus estantes y llenado con algunos libros, te das cuenta de que necesitas añadir una nueva característica a tus libros (por ejemplo, "¿Cuántos ejemplares tenemos en stock?") o eliminar una que ya no es relevante (quizás el "Número de Edición" ya no importa tanto). SQL, el lenguaje que usamos para hablar con nuestras bases de datos, nos ofrece herramientas poderosas para hacer estos cambios sin tener que empezar de cero. En esta lección, exploraremos cómo añadir y eliminar estas "características" o "campos" en tus tablas de SQL, utilizando comandos claros y ejemplos prácticos. Prepárate para aprender a adaptar tus estructuras de datos como un verdadero arquitecto de la información.
+
+### **Modificando la Estructura de Tablas en SQL**
+
+En el mundo de las bases de datos, las "tablas" son esenciales para organizar la información, muy parecido a cómo una hoja de cálculo organiza datos en filas y columnas. Cada columna representa un tipo específico de información, como el nombre de un producto o la fecha de una transacción. A veces, después de haber creado una tabla y haber introducido datos en ella, nos damos cuenta de que necesitamos añadir una nueva columna para almacenar información adicional, o tal vez eliminar una que ya no es necesaria. Para hacer esto, utilizamos el comando `ALTER TABLE` en SQL, que significa "alterar tabla". Este comando nos permite modificar la estructura de una tabla existente sin perder los datos que ya contiene. Es como si en tu hoja de cálculo de libros ("Libros"), decides añadir una nueva columna llamada "Cantidad" para saber cuántos ejemplares tienes de cada título.
+
+**1. Añadir un Campo Simple a una Tabla Existente**
+
+Cuando necesitas añadir una nueva "categoría" de información a una tabla que ya existe, utilizas el comando `ALTER TABLE` junto con la palabra clave `ADD`. Piensa en ello como añadir un nuevo espacio en blanco en tu formulario para una nueva pregunta. Por ejemplo, si tienes una tabla llamada `Libros` con columnas para "Título" y "Autor", y ahora quieres saber la "Cantidad" de cada libro que posees, puedes añadir una nueva columna para ello.
+
+La sintaxis básica es la siguiente:
+`ALTER TABLE nombre_de_tabla ADD nombre_de_campo tipo_de_dato;`
+
+Aquí, `nombre_de_tabla` es el estante que quieres modificar (ej. `Libros`), `nombre_de_campo` es la nueva característica que añadirás (ej. `Cantidad`), y `tipo_de_dato` le dice a la base de datos qué tipo de información se guardará allí (ej. `INT` para números enteros, `VARCHAR` para texto).
+
+**Ejemplo Práctico:**
+Si tienes tu tabla `Libros` y quieres añadir la columna `Cantidad` para almacenar números enteros:
+`ALTER TABLE Libros ADD Cantidad INT;`
+
+Al ejecutar esta instrucción, tu tabla `Libros` obtendrá una nueva columna llamada `Cantidad`. Es importante notar que, para todos los libros que ya existían en tu tabla, el valor en esta nueva columna `Cantidad` será `NULL`. `NULL` es un término en SQL que significa "sin valor" o "desconocido". Es como si añadieras una pregunta nueva a un cuestionario que ya fue respondido: las respuestas anteriores para esa pregunta simplemente no existen. En futuras entradas, podrás especificar la cantidad.
+
+**2. Añadir un Campo con Restricción "No Nulo" y Valor por Defecto**
+
+A veces, al añadir un nuevo campo, quieres asegurarte de que este campo *siempre* tenga un valor; es decir, no quieres que se quede como `NULL`. Esto se conoce como una restricción "NOT NULL" (no nulo). Por ejemplo, si añades un campo llamado "Existencia" para indicar cuántos libros hay en la tienda, quizás quieras que ese número nunca sea desconocido (`NULL`), sino que por defecto sea 0 si no se especifica.
+
+Sin embargo, hay un detalle importante: si intentas añadir un campo "NOT NULL" a una tabla que *ya tiene datos*, SQL te dará un error. ¿Por qué? Porque la base de datos no sabe qué valor poner en esa nueva columna "obligatoria" para los registros antiguos que ya existen. Imagina que tienes una lista de alumnos y quieres añadir una columna de "Calificación Final" que *no puede estar vacía*. Si ya tienes alumnos en la lista sin calificación, el sistema no sabrá qué poner, y no permitirá el cambio.
+
+La solución es proporcionar un "valor por defecto" (`DEFAULT`) para ese campo. Esto significa que si no se especifica un valor al añadir un nuevo registro, o para los registros existentes, se usará este valor preestablecido.
+
+La sintaxis para añadir un campo "NOT NULL" con un valor por defecto es:
+`ALTER TABLE nombre_de_tabla ADD (nombre_de_campo tipo_de_dato DEFAULT valor_por_defecto NOT NULL);`
+
+**Ejemplo Práctico:**
+Si quieres añadir la columna `Existencia` a la tabla `Libros`, que debe ser `INT`, nunca `NULL`, y por defecto debe ser `0`:
+`ALTER TABLE Libros ADD (Existencia INT DEFAULT 0 NOT NULL);`
+
+Con esta instrucción, la columna `Existencia` se añade a la tabla `Libros`. Todos los libros existentes obtendrán un `0` en su campo `Existencia` automáticamente. Cualquier nuevo libro que añadas y no especifiques su `Existencia` también tendrá un `0`. Esto es fundamental para mantener la integridad de tus datos, asegurando que ciertos campos críticos nunca estén vacíos. Si intentaras insertar un nuevo libro y no proporcionaras un valor para "Existencia" y tampoco hubiera un valor `DEFAULT` establecido, el sistema te impediría el registro.
+
+**3. Añadir Múltiples Campos y Eliminar Campos**
+
+SQL también te permite realizar varias modificaciones a la vez, como añadir múltiples campos en una sola instrucción o eliminar campos que ya no necesitas. Es como reorganizar varias partes de tu estante de libros al mismo tiempo.
+
+**A. Añadir Varios Campos a la Vez:**
+Si tienes la necesidad de añadir más de una columna a tu tabla, puedes hacerlo en una sola instrucción `ALTER TABLE`. Esto es más eficiente que ejecutar varias instrucciones separadas. Simplemente lista todos los campos que deseas añadir, separados por comas, dentro de un mismo paréntesis después de `ADD`. Cada campo puede tener sus propias restricciones, como `DEFAULT` y `NOT NULL`.
+
+**Sintaxis:**
+`ALTER TABLE nombre_de_tabla ADD (campo1 tipo_dato [restricciones], campo2 tipo_dato [restricciones], ...);`
+
+**Ejemplo Práctico:**
+Si a tu tabla `Libros` le quieres añadir `Vendidos` (libros vendidos, `INT`, por defecto 0, no nulo) y `EnStock` (libros en almacén, `INT`, por defecto 0, no nulo):
+`ALTER TABLE Libros ADD (Vendidos INT DEFAULT 0 NOT NULL, EnStock INT DEFAULT 0 NOT NULL);`
+
+Esta instrucción añade ambas columnas a tu tabla, configurándolas con un valor por defecto de `0` para los libros existentes y para los nuevos que no especifiquen estos valores, y asegurando que nunca estén `NULL`.
+
+**B. Eliminar Campos de una Tabla:**
+Si un campo ya no es relevante o se creó por error, puedes eliminarlo de tu tabla usando `ALTER TABLE` con la palabra clave `DROP COLUMN`. Es como quitar una categoría completa de tu formulario de libros.
+
+**Sintaxis para un solo campo:**
+`ALTER TABLE nombre_de_tabla DROP COLUMN nombre_de_campo;`
+
+**Ejemplo Práctico:**
+Para eliminar el campo `EnStock` de tu tabla `Libros`:
+`ALTER TABLE Libros DROP COLUMN EnStock;`
+
+**Sintaxis para múltiples campos:**
+Si necesitas eliminar varios campos, puedes listarlos dentro de paréntesis después de `DROP`, pero ¡ojo!, en este caso, la palabra `COLUMN` se omite. Este es un detalle importante que a menudo causa errores si no se recuerda.
+
+`ALTER TABLE nombre_de_tabla DROP (campo1, campo2, ...);`
+
+**Ejemplo Práctico:**
+Para eliminar los campos `Existencia` y `Vendidos` de tu tabla `Libros`:
+`ALTER TABLE Libros DROP (Existencia, Vendidos);`
+
+Es crucial tener cuidado al eliminar campos, ya que esta operación es destructiva: toda la información contenida en esas columnas se perderá permanentemente. Además, si el campo que intentas eliminar está relacionado con otras partes de tu base de datos (por ejemplo, es parte de una "clave primaria" o "clave foránea" que vincula tablas), SQL te impedirá eliminarlo directamente para proteger la integridad de tus datos, a menos que especifiques opciones adicionales para manejar esas relaciones. Estos comandos son herramientas poderosas para adaptar la estructura de tu base de datos a medida que tus necesidades evolucionan, permitiéndote mantener la información organizada y relevante.

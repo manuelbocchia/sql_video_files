@@ -1,0 +1,84 @@
+# Funciones Esenciales de Manipulación de Cadenas en Oracle SQL: Tu Caja de Herramientas para el Texto
+
+¡Hola y bienvenidos a esta lección sobre las funciones de manipulación de cadenas en Oracle SQL! En el mundo de las bases de datos, no todo son números; gran parte de la información que manejamos es texto, como nombres, descripciones, direcciones de correo electrónico o códigos de productos. Aprender a trabajar con estas cadenas de caracteres, también conocidas como "strings", es una habilidad fundamental para cualquier persona que interactúe con datos.
+
+Imagina que tienes una gran biblioteca llena de libros. Las funciones de cadenas de Oracle SQL son como las herramientas especializadas de un bibliotecario experto que te permiten organizar, encontrar, extraer y modificar partes específicas de los textos. Con estas herramientas, puedes desde cortar un fragmento de un título hasta reemplazar letras o verificar si un libro contiene una palabra clave. Dominar estas funciones te permitirá limpiar datos, generar reportes precisos y extraer la información exacta que necesitas de grandes volúmenes de texto, convirtiendo datos brutos en conocimiento útil. A continuación, exploraremos cuatro funciones clave: `SUBSTR`, `LENGTH`, `INSTR` y `TRANSLATE`.
+
+---
+
+### Extrayendo Información Específica con SUBSTR
+
+La función `SUBSTR` (abreviatura de "substring") es tu navaja suiza para cortar y extraer una porción de una cadena de texto. Piensa en ella como si tuvieras una larga cinta métrica con texto impreso y quisieras cortar solo un segmento específico. Esta función te permite indicar dónde quieres empezar a cortar y cuántos caracteres quieres incluir en tu pedazo.
+
+**Cómo funciona:**
+La sintaxis básica es `SUBSTR(cadena_original, posicion_inicial, [longitud])`.
+*   **`cadena_original`**: Es la cadena de texto de la que deseas extraer una parte.
+*   **`posicion_inicial`**: Es el número que indica dónde comienza tu corte.
+    *   Si es un número **positivo** (como 1, 2, 3...), la función empieza a contar desde el inicio de la cadena, de izquierda a derecha. El primer carácter está en la posición 1.
+    *   Si es un número **negativo** (como -1, -2, -3...), la función empieza a contar desde el final de la cadena, de derecha a izquierda. Por ejemplo, `-3` significa empezar a contar desde el tercer carácter antes del final.
+*   **`longitud` (opcional)**: Es la cantidad de caracteres que quieres extraer a partir de la `posicion_inicial`. Si omites este valor, `SUBSTR` extrae todos los caracteres desde la `posicion_inicial` hasta el final de la cadena.
+
+**Ejemplos y Aplicaciones Reales:**
+*   **Extraer un dominio de un correo electrónico:** Si tienes 'usuario@ejemplo.com' y quieres solo 'ejemplo.com', puedes usar `SUBSTR`.
+*   **Obtener el prefijo de un código de producto:** Si tus productos tienen códigos como 'ELC-TV001' y quieres 'ELC', `SUBSTR` es ideal.
+*   **Trabajar con fechas en formato de texto:** Si una fecha está como '20231026' y solo quieres el año ('2023'), puedes usar `SUBSTR`.
+*   **Recuperar las últimas letras de una palabra:** Si tienes 'ordenador' y quieres 'dor' (las últimas 3 letras), usarías `SUBSTR('ordenador', -3)`.
+
+Esta función es increíblemente útil para limpiar y normalizar datos, o para mostrar solo la parte relevante de una cadena sin tener que ver el texto completo.
+
+---
+
+### Conociendo el Tamaño y Ubicación con LENGTH e INSTR
+
+Cuando trabajamos con cadenas de texto, a menudo necesitamos saber qué tan largas son o dónde se encuentra una parte específica dentro de ellas. Aquí es donde entran en juego las funciones `LENGTH` e `INSTR`, que actúan como tu "cinta métrica" y tu "detective de texto", respectivamente.
+
+**LENGTH: El Medidor de Longitud**
+La función `LENGTH` es muy sencilla y directa: te devuelve el número total de caracteres que tiene una cadena de texto.
+*   **Cómo funciona:** Su sintaxis es `LENGTH(cadena_de_texto)`.
+*   **Ejemplo:** `LENGTH('Hola Mundo')` devolverá `10` (contando el espacio en blanco).
+*   **Aplicaciones Reales:**
+    *   **Validación de datos:** Asegurarte de que una contraseña tenga al menos 8 caracteres o que un código de producto tenga una longitud específica.
+    *   **Reportes:** Mostrar el número de caracteres en un campo de descripción para resúmenes.
+    *   **Diseño de formularios:** Limitar el texto que los usuarios pueden introducir.
+
+**INSTR: El Localizador de Subcadenas**
+La función `INSTR` te ayuda a encontrar la posición inicial de una subcadena (una porción de texto) dentro de una cadena más grande. Es como buscar una palabra específica en un párrafo y saber en qué posición exacta empieza.
+*   **Cómo funciona:** Su sintaxis básica es `INSTR(cadena_principal, subcadena_a_buscar)`.
+*   **Resultados:**
+    *   Si encuentra la subcadena, devuelve la posición del primer carácter donde empieza. La primera posición es 1.
+    *   Si no la encuentra, devuelve `0`.
+*   **Ejemplo:**
+    *   `INSTR('curso de oracle sql', 'curso')` devolverá `1`.
+    *   `INSTR('curso de oracle sql', 'sql')` devolverá `17` (si cuentas, 's' está en la posición 17).
+    *   `INSTR('curso de oracle sql', 'texto')` devolverá `0`.
+*   **Aplicaciones Reales:**
+    *   **Búsqueda de palabras clave:** Verificar si un comentario o descripción contiene ciertas palabras.
+    *   **Análisis de formato:** Comprobar si un correo electrónico contiene el símbolo '@' o si una URL empieza con 'http'.
+    *   **Validación de datos:** Asegurarse de que un campo contenga un patrón específico.
+
+Usadas juntas, `LENGTH` e `INSTR` son poderosas para analizar y validar el contenido textual de tus datos.
+
+---
+
+### Transformando y Limpiando Cadenas con TRANSLATE
+
+La función `TRANSLATE` es una herramienta muy útil para realizar sustituciones de caracteres dentro de una cadena de texto. Piensa en ella como un "codificador" o "limpiador" que puede cambiar caracteres específicos por otros, o incluso eliminarlos, basándose en un mapa de sustitución. A diferencia de otras funciones que reemplazan palabras enteras, `TRANSLATE` trabaja carácter por carácter.
+
+**Cómo funciona:**
+La sintaxis es `TRANSLATE(cadena_original, caracteres_a_reemplazar, caracteres_de_reemplazo)`.
+*   **`cadena_original`**: La cadena de texto sobre la que deseas aplicar las transformaciones.
+*   **`caracteres_a_reemplazar`**: Una lista de caracteres que quieres encontrar en la `cadena_original`.
+*   **`caracteres_de_reemplazo`**: Una lista de caracteres por los que se sustituirán los `caracteres_a_reemplazar`. La sustitución se hace por posición: el primer carácter de `caracteres_a_reemplazar` se cambia por el primer carácter de `caracteres_de_reemplazo`, y así sucesivamente.
+
+**Aspecto clave a tener en cuenta:**
+*   Si `caracteres_de_reemplazo` es más corto que `caracteres_a_reemplazar`, los caracteres restantes en `caracteres_a_reemplazar` que no tienen un equivalente en `caracteres_de_reemplazo` ¡serán **eliminados** de la `cadena_original`!
+*   Si `caracteres_de_reemplazo` es más largo, los caracteres extra simplemente se ignoran.
+
+**Ejemplos y Aplicaciones Reales:**
+*   **Normalización de texto:**
+    *   Reemplazar vocales acentuadas por sus equivalentes sin acento para búsquedas o consistencia: `TRANSLATE('camión', 'áéíóú', 'aeiou')` resultaría en 'camion'.
+    *   Eliminar puntuación o símbolos no deseados para limpiar datos: `TRANSLATE('Producto #123-ABC!', '#-!', '')` resultaría en 'Producto 123ABC'.
+*   **Generación de códigos simples:** Crear versiones simplificadas de nombres de productos o identificadores.
+*   **Limpieza de datos para análisis:** Si tienes datos con diferentes tipos de separadores (comas, puntos y comas, espacios) y quieres unificarlo todo a un solo separador, `TRANSLATE` puede ser tu aliada.
+
+`TRANSLATE` es una herramienta potente para la limpieza y estandarización de datos, asegurando que tu información sea consistente y fácil de analizar.

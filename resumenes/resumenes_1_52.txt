@@ -1,0 +1,33 @@
+Aquí tienes un resumen didáctico sobre la cláusula `UNION` en SQL:
+
+## `UNION` y `UNION ALL`: Combinando Información de Diferentes Tablas en SQL
+
+¡Hola! Te doy la bienvenida a esta lección fundamental sobre SQL, el lenguaje que nos permite interactuar con las bases de datos. Imagina una base de datos como una gran biblioteca digital donde la información está organizada en "tablas", similares a expedientes o listas detalladas, cada una con filas y columnas.
+
+A menudo, surge la necesidad de ver o analizar datos que están dispersos en diferentes tablas, incluso si estas no tienen una conexión directa entre sí. Por ejemplo, podrías tener una tabla con información de "Empleados" y otra con detalles de "Candidatos", y necesitar una lista unificada de todas las personas que han interactuado con la empresa. Aquí es donde la cláusula `UNION` se convierte en una herramienta invaluable.
+
+La `UNION` te permite combinar los resultados de múltiples consultas `SELECT` (es decir, peticiones de información) que haces a distintas tablas en un solo conjunto de resultados. Piensa en ello como fusionar varias listas en una sola lista maestra. Sin embargo, para que esta unión sea exitosa y tenga sentido, existen requisitos clave: todas las consultas deben seleccionar la misma cantidad de columnas, estas columnas deben tener tipos de datos compatibles y deben estar en el mismo orden. Cumpliendo estas reglas, `UNION` te ofrecerá una vista coherente y consolidada de tus datos, simplificando la forma en que accedes y analizas información de diversas fuentes.
+
+### La Cláusula `UNION`: Uniendo Datos Únicos
+
+La cláusula `UNION` es una herramienta poderosa en SQL diseñada para fusionar los conjuntos de resultados de dos o más sentencias `SELECT` (consultas de selección) en un único conjunto de resultados. Piensa en ella como un "mezclador inteligente" de listas. Si tienes una lista de nombres de "Médicos" y otra de nombres de "Pacientes", `UNION` las combina en una sola lista de "Personas", pero con una característica muy importante: elimina automáticamente cualquier duplicado. Si un nombre aparece en ambas listas, `UNION` lo mostrará solo una vez en el resultado final, lo cual es útil para obtener listas de elementos únicos.
+
+Para que `UNION` funcione correctamente, las consultas que vas a unir deben seguir tres reglas esenciales, como si fueran los cimientos de una construcción:
+1.  **Mismo número de columnas:** Cada consulta `SELECT` debe pedir exactamente la misma cantidad de columnas. Es como intentar apilar dos estanterías: si una tiene 5 baldas y la otra 3, no encajarán perfectamente para formar una sola unidad coherente.
+2.  **Tipos de datos compatibles:** Las columnas correspondientes en cada `SELECT` deben tener tipos de datos similares o que puedan convertirse entre sí. No puedes combinar una columna de "nombre" (texto) con una columna de "fecha de nacimiento" (fecha) y esperar un resultado lógico. Los datos deben ser del mismo "tipo" o compatibles para poder apilarse.
+3.  **Mismo orden de columnas:** Las columnas deben estar en el mismo orden lógico en cada `SELECT`. Si la primera consulta selecciona `Nombre, Domicilio`, la segunda también debe seleccionar `Nombre, Domicilio` para que los datos se alineen correctamente en el resultado final.
+
+Un escenario común para usar `UNION` es cuando necesitas ver información combinada de tablas que *no están directamente relacionadas* por claves primarias o foráneas. Por ejemplo, en una clínica, podrías tener una tabla de `Médicos` con `(Documento, Nombre, Domicilio)` y una tabla de `Pacientes` con `(Documento, Nombre, Domicilio)`. Aunque no hay una relación directa establecida entre ellas, `UNION` te permite obtener una lista única de todos los nombres y domicilios de *todas* las personas registradas en ambas tablas, sin repeticiones. Es decir, si un médico también es paciente (hipotéticamente), aparecerá solo una vez en la lista final.
+
+### `UNION ALL`: Incluyendo Cada Registro
+
+Mientras que la cláusula `UNION` es excelente para obtener una lista consolidada y sin duplicados, a veces necesitamos ver *todos* los registros, incluso si se repiten en las diferentes tablas. Aquí es donde entra `UNION ALL`. Esta cláusula funciona de manera similar a `UNION` en cuanto a la combinación de resultados de múltiples sentencias `SELECT`, pero con una diferencia clave y fundamental: **`UNION ALL` no elimina los registros duplicados**. Muestra cada fila de cada consulta, tal como aparece en las tablas originales.
+
+Imagina la analogía de las listas de compras de nuevo: si `UNION` era el "mezclador inteligente" que quitaba duplicados, `UNION ALL` es como si simplemente graparas todas las listas de compras juntas, una detrás de otra, sin preocuparte si un artículo como "leche" aparece en dos de ellas. Simplemente quieres ver *todo* lo que se escribió en todas las listas, sin filtros.
+
+Las reglas para usar `UNION ALL` son las mismas que para `UNION`: las consultas `SELECT` deben tener el mismo número de columnas, tipos de datos compatibles y el mismo orden de columnas. La única diferencia entre ambas es el manejo de los duplicados.
+
+¿Cuándo usar `UNION ALL`?
+*   **Cuando los duplicados son importantes:** Si realmente necesitas ver todas las ocurrencias de un dato, incluso si aparece en más de una tabla. Por ejemplo, una universidad podría querer una lista de *todas* las matrículas en el semestre de otoño y el de primavera, sin importar si algunos estudiantes se matricularon en ambos, porque el recuento total de matrículas (cada instancia) es crucial.
+*   **Para mejorar el rendimiento:** Como `UNION ALL` no tiene que realizar la tarea adicional y computacionalmente costosa de buscar y eliminar duplicados, generalmente es más rápido que `UNION`. Si sabes que tus conjuntos de datos no tendrán duplicados significativos o si los duplicados no te importan, `UNION ALL` puede ser la opción más eficiente.
+*   **Contexto de uso:** Al igual que `UNION`, `UNION ALL` es particularmente útil para combinar datos de tablas que no tienen una relación directa entre sí, pero que contienen información que deseas ver de forma unificada. Es una manera flexible de agrupar datos de fuentes diversas sin necesidad de establecer conexiones complejas entre ellas, proporcionando la flexibilidad de incluir o excluir duplicados según tu necesidad específica.

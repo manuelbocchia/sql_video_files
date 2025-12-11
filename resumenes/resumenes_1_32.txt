@@ -1,0 +1,37 @@
+¡Hola! Si alguna vez te has preguntado cómo la información que ingresas en una aplicación o sitio web termina guardada y organizada para que puedas consultarla más tarde, la respuesta se encuentra en las bases de datos. Son como grandes archivadores digitales, súper ordenados, donde cada pieza de información tiene su lugar. En este resumen, nos sumergiremos en el corazón de una tarea fundamental para cualquier base de datos: ¡insertar datos! Imagina que estás construyendo una lista de contactos para tu negocio o los productos para una tienda en línea. Necesitas una forma de añadir cada nuevo contacto o producto a esa lista digital.
+
+Utilizaremos el lenguaje SQL (Structured Query Language), que es el estándar para comunicarnos con las bases de datos, y Oracle, una de las bases de datos más potentes y utilizadas en el mundo. Veremos cómo, paso a paso, podemos introducir nueva información en nuestras "tablas" (que son como las hojas de cálculo dentro de nuestro archivador digital), tanto de forma visual e intuitiva como a través de comandos directos. Comprender esto no solo te abrirá la puerta al desarrollo de aplicaciones, sino que también te ayudará a entender cómo funciona el almacenamiento de datos en el mundo digital que nos rodea. ¡Prepárate para aprender a darle vida a tus bases de datos!
+
+### Creación y Estructura de Tablas: El Cimiento de tus Datos
+
+Antes de poder guardar información, necesitamos un lugar donde ponerla. En las bases de datos, este lugar se llama "tabla". Piensa en una tabla como una hoja de cálculo muy organizada, donde cada columna tiene un nombre específico y un tipo de dato que define qué tipo de información puede almacenar. Por ejemplo, una columna para nombres solo guardaría texto, mientras que una columna para edades solo aceptaría números. Esta estructura es crucial porque asegura que los datos sean consistentes y correctos.
+
+Para crear una tabla, utilizamos el comando `CREATE TABLE`. Necesitamos darle un nombre a la tabla (como `EMPLEADO` en nuestro ejemplo) y luego definir cada una de sus columnas. Cada columna requiere un nombre (como `ID_EMPLEADO`, `NOMBRE`, `SUELDO`) y un "tipo de dato". Algunos tipos comunes son:
+*   **`INT`** (o `NUMBER` sin decimales): Para números enteros, como un ID de empleado (ej., 1, 2, 3).
+*   **`VARCHAR2(tamaño)`**: Para texto de longitud variable, como nombres o direcciones. El `tamaño` especifica la longitud máxima permitida (ej., `VARCHAR2(20)` para un nombre de hasta 20 caracteres).
+*   **`NUMBER(p, s)`**: Para números con decimales, como un sueldo. `p` es el número total de dígitos y `s` es el número de decimales (ej., `NUMBER(6,2)` para un sueldo de hasta 4 dígitos antes del punto y 2 después).
+*   **`DATE`**: Para fechas, como una fecha de nacimiento.
+
+También podemos añadir restricciones, como `NOT NULL`, que obliga a que un campo no pueda dejarse vacío. Una vez creada la tabla, podemos ver su estructura usando la herramienta gráfica de SQL Developer o el comando `DESCRIBE nombre_tabla` en el editor, lo cual nos muestra todas las columnas, sus tipos y restricciones, preparándonos para insertar los datos.
+
+### Insertar Datos de Forma Gráfica en SQL Developer
+
+Imagina que tienes un formulario digital en una página web y solo necesitas rellenar casillas para guardar información. Insertar datos de forma gráfica en SQL Developer es muy similar. Esta es una manera sencilla e intuitiva de añadir registros, ideal para cuando estás empezando, necesitas hacer pocas inserciones o simplemente quieres verificar algo rápidamente.
+
+Una vez que has creado tu tabla (por ejemplo, `EMPLEADO`), SQL Developer te ofrece una interfaz visual para gestionarla. Puedes encontrar tu tabla en el "Explorador de Objetos" (Object Explorer), que es como un índice de todo lo que tienes en tu base de datos. Al hacer clic sobre ella y luego navegar a la pestaña "Datos" (Data), verás las columnas de tu tabla, pero vacías. Aquí es donde comienza la magia: un pequeño botón con un signo de más (+) te permite añadir una nueva fila. Al hacer clic, se habilitan los campos para que puedas escribir la información directamente en cada columna (ID de empleado, nombre, dirección, etc.).
+
+Es crucial recordar el tipo de dato que definiste para cada columna. Por ejemplo, si una columna es de tipo `NUMBER`, solo podrás ingresar números. Si es `VARCHAR2`, podrás escribir texto. Y si es `DATE`, SQL Developer a menudo te guiará con un formato. Una vez que has rellenado todos los campos de un registro (o fila), un botón con un visto bueno (o "commit") confirmará la inserción. Si hay algún error (por ejemplo, intentas ingresar texto en un campo numérico), el sistema te lo indicará. Esta experiencia visual es como usar una hoja de cálculo, donde rellenas las celdas y el sistema se encarga de guardarlo correctamente en la base de datos.
+
+### Insertar Datos Mediante Comandos SQL: Precisión y Potencia
+
+Mientras que la inserción gráfica es excelente para principiantes, el método más potente y común en el desarrollo profesional es utilizar comandos SQL directamente. Esto te permite insertar múltiples registros, automatizar procesos y tener un control preciso sobre la información que entra en tu base de datos. Es como escribir una instrucción detallada para que la base de datos sepa exactamente qué hacer.
+
+El comando fundamental para esto es `INSERT INTO`. Su estructura básica es:
+`INSERT INTO nombre_tabla (columna1, columna2, ...) VALUES (valor1, valor2, ...);`
+
+Aquí, `nombre_tabla` es la tabla donde quieres guardar los datos (ej., `EMPLEADO`). Luego, entre paréntesis, puedes listar las columnas a las que quieres asignar valores (aunque si vas a llenar todas las columnas en el orden en que se crearon, puedes omitir esta lista). Finalmente, después de `VALUES`, especificas los datos que quieres insertar, asegurándote de que coincidan con el orden de las columnas y, lo más importante, con sus tipos de datos:
+*   **Para texto (`VARCHAR2`):** Los valores deben ir entre comillas simples (ej., `'Juan Pérez'`).
+*   **Para números (`INT`, `NUMBER`):** Se ingresan directamente sin comillas (ej., `3000`).
+*   **Para fechas (`DATE`):** Este es un caso especial. No puedes simplemente escribir la fecha. Debes usar la función `TO_DATE` para decirle a Oracle que interprete tu texto como una fecha, y especificar el formato. Por ejemplo: `TO_DATE('10/03/1988', 'DD/MM/YYYY')`, donde `DD` es día, `MM` es mes y `YYYY` es año.
+
+Cada instrucción `INSERT INTO` generalmente añade una única fila a la tabla. Después de ejecutar el comando, el sistema te confirmará si "una fila fue insertada correctamente". Si tienes un error, usualmente se debe a un tipo de dato incorrecto, un valor faltante en un campo `NOT NULL`, o un error de sintaxis. Para verificar que los datos se hayan insertado, puedes usar el comando `SELECT * FROM nombre_tabla;`, que te mostrará todas las filas y columnas de tu tabla. Este método de inserción es fundamental para crear scripts que automatizan la carga de datos masivos o para integrar tu base de datos con aplicaciones que gestionan la información programáticamente.

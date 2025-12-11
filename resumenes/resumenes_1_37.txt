@@ -1,0 +1,42 @@
+## Operadores LIKE y NOT LIKE en SQL: Búsqueda Flexible de Texto
+
+### Introducción a la Búsqueda de Texto en SQL
+
+En el mundo de las bases de datos, manejar grandes volúmenes de información es una tarea común, y una de las más frecuentes es la búsqueda de datos específicos. Cuando trabajamos con textos, a menudo necesitamos encontrar registros que no coinciden exactamente con una palabra, sino con un patrón o una parte de ella. Imagina que tienes una biblioteca con miles de libros y recuerdas solo una parte del título o el apellido de un autor, pero no la forma exacta. Si solo pudieras buscar por el título completo y preciso, encontrar ese libro sería casi imposible.
+
+Aquí es donde entran en juego los operadores `LIKE` y `NOT LIKE` en SQL (Structured Query Language). A diferencia del operador de igualdad (`=`), que requiere una coincidencia exacta, `LIKE` nos permite realizar búsquedas "difusas" o por patrones dentro de las cadenas de texto. Esto es increíblemente útil para filtrar información de manera más flexible, permitiéndonos encontrar datos aunque solo conozcamos una porción del contenido o su estructura. Aprenderemos cómo estos operadores, junto con unos caracteres especiales llamados comodines, nos abren un abanico de posibilidades para interrogar nuestras bases de datos de forma más inteligente y eficiente.
+
+### El Operador LIKE y los Comodines: '%' (Cualquier Secuencia)
+
+El operador `LIKE` es la herramienta principal para la búsqueda de patrones en SQL. Su superpoder reside en el uso de "comodines" o caracteres especiales que representan uno o varios caracteres desconocidos. El comodín más versátil es el signo de porcentaje (`%`). Este símbolo actúa como un "comodín de múltiples caracteres", significando "cero o más caracteres de cualquier tipo". Puedes pensar en él como un espacio en blanco que puede ser llenado por cualquier cosa, desde nada hasta una secuencia larga de letras, números o símbolos.
+
+Veamos cómo se utiliza `%` para buscar:
+*   **`LIKE 'Pérez%'`**: Busca cadenas de texto que *comiencen* con "Pérez". Por ejemplo, encontraría "Pérez", "Pérez Rojas", "Pérez-García". Es como buscar "todos los apellidos que empiecen con Pérez".
+*   **`LIKE '%Pérez'`**: Busca cadenas de texto que *terminen* con "Pérez". Por ejemplo, "Juan Pérez", "María Pérez". Es como buscar "todos los nombres que terminen en Pérez".
+*   **`LIKE '%Pérez%'`**: Busca cadenas de texto que *contengan* "Pérez" en cualquier parte. Por ejemplo, "Pedro Pérez", "Pérez Abad", "López de la Pérez". Esto es ideal cuando no sabes si la palabra está al principio, al final o en el medio.
+
+Es importante recordar que la búsqueda con `LIKE` puede ser sensible a mayúsculas y minúsculas dependiendo de la configuración de tu base de datos (lo que se conoce como "collation"). Por ejemplo, si buscas `'%Pérez%'`, podría no encontrar `'pérez'` si la base de datos es sensible a mayúsculas y minúsculas. Esto lo vimos al buscar "Pérez" con `P` mayúscula y luego "érez" sin la `P` para encontrar ambas variaciones. En la vida real, esto sirve para encontrar todos los clientes de una ciudad específica sin importar si el nombre de la ciudad está escrito en mayúsculas, minúsculas o combinado, o para hallar productos cuyo código contenga una serie particular de números.
+
+### El Comodín '_' (Un Carácter Único) y Combinaciones
+
+Además del comodín de porcentaje (`%`), SQL nos ofrece otro comodín útil: el guion bajo (`_`). A diferencia del `%` que representa cualquier número de caracteres (o ninguno), el `_` representa *exactamente un carácter único*. Piensa en él como un "comodín de un solo carácter", un espacio en blanco que debe ser llenado por una sola letra, número o símbolo. Esto es muy útil cuando buscas patrones con una longitud específica o cuando solo un carácter difiere en la búsqueda.
+
+Veamos ejemplos de su uso:
+*   **`LIKE 'G_______'`**: Esto busca cadenas de texto que empiecen con la letra 'G' y tengan exactamente siete caracteres después de ella. En total, el texto debe tener 8 caracteres. Por ejemplo, encontraría "Gerencia" si está escrito con 8 letras. Es como decir: "Quiero una palabra de 8 letras que empiece con 'G'".
+*   **`LIKE 'S________'`**: Similarmente, buscaría cadenas que comiencen con 'S' y tengan nueve caracteres después, sumando un total de 10 caracteres. Por ejemplo, "Secretaría".
+*   **Combinando comodines**: Los comodines `%` y `_` pueden usarse juntos para crear patrones de búsqueda más complejos y precisos. Por ejemplo, `LIKE 'Co%8%'` buscaría cualquier texto que empiece con "Co", tenga cualquier secuencia de caracteres (o ninguna) después, y luego contenga el número "8" en alguna posición, seguido por cualquier otra secuencia. Esto es muy potente para definir reglas de búsqueda intrincadas.
+
+En escenarios prácticos, el `_` es valioso para validar formatos de datos. Por ejemplo, si tienes códigos de producto que siempre tienen un formato de "tres letras, un guion y cuatro números" (ej. "ABC-1234"), podrías buscar `LIKE '___-____'`. O si buscas nombres de archivos que sabes que tienen una extensión específica de 3 letras, podrías usar `LIKE 'nombre_archivo.____'`. Es una forma poderosa de especificar la longitud exacta de las partes que componen un texto.
+
+### El Operador NOT LIKE (Excluyendo Patrones)
+
+Mientras que el operador `LIKE` se usa para encontrar registros que *coinciden* con un patrón, el operador `NOT LIKE` hace exactamente lo contrario: se utiliza para encontrar todos los registros que *no coinciden* con un patrón específico. Es la herramienta perfecta cuando necesitas excluir ciertos datos de tus resultados. Si `LIKE` te dice "encuéntrame esto", `NOT LIKE` te dice "encuéntrame todo, *excepto* esto".
+
+Imagina que tienes una lista de empleados y quieres ver a todos los que no tienen el apellido "Pérez" en su nombre, o que sus correos electrónicos no pertenecen a un dominio específico. `NOT LIKE` te permite filtrar precisamente eso.
+
+Ejemplos de su aplicación:
+*   **`SELECT * FROM empleados WHERE nombre NOT LIKE '%Pérez%'`**: Esta consulta devolvería todos los empleados cuyo nombre *no* contenga la cadena "Pérez" en ninguna parte. Si antes buscábamos a los "Pérez", ahora buscamos a todos los demás.
+*   **`SELECT * FROM documentos WHERE numero_documento NOT LIKE '%888'`**: Esto recuperaría todos los registros de documentos donde el número de documento *no termine* en "888". Es muy útil para identificar excepciones o datos que no cumplen con una norma específica.
+*   **`SELECT * FROM productos WHERE descripcion NOT LIKE '%oferta%'`**: Podría usarse para encontrar productos que no están marcados como "oferta" en su descripción, quizás para una campaña publicitaria diferente.
+
+En un contexto real, `NOT LIKE` es invaluable para tareas de limpieza de datos, identificar anomalías o simplemente para obtener una visión inversa de tus búsquedas. Por ejemplo, si necesitas saber qué direcciones de clientes no contienen un número de apartamento o edificio (quizás porque no siguen un patrón numérico), podrías usar `NOT LIKE` para filtrarlas. Es una herramienta poderosa para refinar y enfocar tus consultas de manera que excluyan información no deseada o irrelevante para tu análisis.
